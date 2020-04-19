@@ -4,7 +4,7 @@ chrome.tabs.query({active: true, currentWindow: true},
         chrome.tabs.sendMessage(tabs[0].id, "getProblemName", 
             function(response) {
                 if(!response) {
-                    console.log("response error: ", response);
+                    console.error("response error: ", response);
                     return;
                 }
 
