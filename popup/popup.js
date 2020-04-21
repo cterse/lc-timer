@@ -1,17 +1,12 @@
+chrome.storage.sync.get("probs_list", function(result){
+    if (result && result.probs_list) {
+        str = "Total problems monitored: " + result.probs_list.length + "<br/>";
+        for (let i=0; i < result.probs_list.length; i++) {
+            str += result.probs_list[i].code + ":" + result.probs_list[i].name + "<br/>";
+        }
+        document.getElementById("main").innerHTML = str;
+    }
 
-chrome.tabs.query({active: true, currentWindow: true}, 
-    function(tabs){
-        chrome.tabs.sendMessage(tabs[0].id, "getProblemName", 
-            function(response) {
-                if(!response) {
-                    console.error("response error: ", response);
-                    return;
-                }
-
-                let problemsList = document.getElementById("main").innerHTML;
-                problemsList = problemsList + " : " + response;
-                document.getElementById("main").innerHTML = problemsList;
-            }
-        );
-    }    
-);
+    console.dir(result);
+    console.dir(result.probs_list);
+});

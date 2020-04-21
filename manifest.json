@@ -7,7 +7,7 @@
         "128": "assets/images/icon128.png"
     },
 
-    "permissions": [],
+    "permissions": ["storage"],
 
     "background": {
         "persistent": false,
