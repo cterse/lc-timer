@@ -26,6 +26,38 @@ window.onload = function() {
         }
     }
 
+    let submitButtonInterval = setInterval(setupSubmitScript, 100);
+
+    function setupSubmitScript() {
+        if (document.querySelector("button[data-cy=submit-code-btn]")) {
+            clearInterval(submitButtonInterval);
+
+            document.querySelector("button[data-cy=submit-code-btn]").onclick = function() {
+                let submissionProcessingInterval = setInterval(validateSubmissionAndProceed, 100);
+            
+                function validateSubmissionAndProceed() {
+                    if (document.getElementsByClassName("success__3Ai7").length > 0) {
+                        clearInterval(submissionProcessingInterval);
+        
+                        //add end timestamp to problem in storage
+                        console.debug("Submission Success. Adding end timestamp.");
+                        chrome.storage.sync.get("problem_collection_obj", function(result) {
+                            if(result && result.problem_collection_obj) {
+                                result.problem_collection_obj[getProblemObject().code].end_ts = Date.now();
+                                
+                                chrome.storage.sync.set({"problem_collection_obj": result.problem_collection_obj}, function () {
+                                    console.debug("Added end timestamp to problem.");
+                                });
+                            } else {
+                                console.error("Error retrieving problems from storage.");
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
 };
 
 function getProblemObject(init_timestamp) {

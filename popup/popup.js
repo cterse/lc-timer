@@ -7,8 +7,9 @@ chrome.storage.sync.get("problem_collection_obj", function(result){
             pstr = "";
             for (var key in result.problem_collection_obj) {
                 if (result.problem_collection_obj.hasOwnProperty(key)) {
-                    pstr += result.problem_collection_obj[key].code + " : " + result.problem_collection_obj[key].name + " : ";
-                    pstr += ((Date.now() - result.problem_collection_obj[key].init_ts)/1000) + "<br />";
+                    problemObj = result.problem_collection_obj[key];
+                    pstr += problemObj.code + " : " + problemObj.name + " : ";
+                    pstr += (((problemObj.end_ts ? problemObj.end_ts : Date.now()) - problemObj.init_ts)/1000) + "<br />";
                 } 
             }
             document.getElementById("main").innerHTML = pstr;
