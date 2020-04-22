@@ -1,42 +1,32 @@
 window.onload = function() {
-    let jsInitInterval = setInterval(function() {
+    let pageInitInterval = setInterval(setupMonitoringScript, 100);
+    
+    function setupMonitoringScript() {
         if (document.querySelector("div[data-cy=question-title]")) {
-            clearInterval(jsInitInterval);
+            clearInterval(pageInitInterval);
 
             prob_obj = getProblemObject(new Date().getTime());
-            chrome.storage.sync.get("probs_list", function(result){
+            chrome.storage.sync.get("problem_collection_obj", function(result){
                 if (!result) {
                     console.error("Error getting result from sync.");
                     return null;
                 }
                 
-                problemList = [];
-                if (result.probs_list) {
+                problemsCollectionObject = {};
+                if (result.problem_collection_obj) {
                     console.debug("Retrieving existing problem list from storage.");
-                    problemList = result.probs_list;
+                    problemsCollectionObject = result.problem_collection_obj;
                 }
-                problemList.push(prob_obj);
+                problemsCollectionObject[prob_obj.code] = prob_obj;
 
-                chrome.storage.sync.set({"probs_list": problemList}, function(){
-                    console.log("set data to storage.")
+                chrome.storage.sync.set({"problem_collection_obj":  problemsCollectionObject}, function(){
+                    console.debug("set data to storage.")
                 });
             });
         }
-    }, 100);
-};
-
-chrome.runtime.onMessage.addListener(
-    function(message, sender, sendResponse){
-        switch(message) {
-            case "getProblemName":
-                let problemName = getProblemName();
-                sendResponse(problemName);
-                break;
-            default:
-                console.error("Unrecognized message", message);
-        }
     }
-);
+
+};
 
 function getProblemObject(init_timestamp) {
     problemTitleNode = document.querySelector("div[data-cy=question-title]");
