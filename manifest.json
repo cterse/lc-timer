@@ -18,11 +18,6 @@
         {
             "matches": ["https://*.leetcode.com/problems/*"],
             "js": ["content-scripts/content.js"]
-        }, 
-        {
-            "matches": ["<all_urls>"],
-            "exclude-matches": ["https://*.leetcode.com/problems/*"],
-            "js": ["content-scripts/general-content.js"]
         }
     ],
 
