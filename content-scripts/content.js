@@ -8,19 +8,19 @@ window.onload = function() {
             prob_obj = getProblemObject(new Date().getTime());
             chrome.storage.sync.get("problem_collection_obj", function(result){
                 if (!result) {
-                    console.error("Error getting result from sync.");
+                    console.error("lc-timer:setupMonitoringScript: Error getting result from sync.");
                     return null;
                 }
                 
                 problemsCollectionObject = {};
                 if (result.problem_collection_obj) {
-                    console.debug("Retrieving existing problem list from storage.");
+                    console.debug("lc-timer:setupMonitoringScript: Retrieving existing problem list from storage.");
                     problemsCollectionObject = result.problem_collection_obj;
                 }
                 problemsCollectionObject[prob_obj.code] = prob_obj;
 
                 chrome.storage.sync.set({"problem_collection_obj":  problemsCollectionObject}, function(){
-                    console.debug("set data to storage.")
+                    console.debug("lc-timer:setupMonitoringScript: set data to storage.")
                 });
             });
         }
@@ -40,17 +40,18 @@ window.onload = function() {
                         clearInterval(submissionProcessingInterval);
         
                         //add end timestamp to problem in storage
-                        console.debug("Submission Success. Adding end timestamp.");
+                        console.debug("lc-timer:setupSubmitScript: Submission Success. Adding end timestamp.");
                         chrome.storage.sync.get("problem_collection_obj", function(result) {
-                            if(result && result.problem_collection_obj) {
-                                result.problem_collection_obj[getProblemObject().code].end_ts = Date.now();
-                                
-                                chrome.storage.sync.set({"problem_collection_obj": result.problem_collection_obj}, function () {
-                                    console.debug("Added end timestamp to problem.");
-                                });
-                            } else {
-                                console.error("Error retrieving problems from storage.");
+                            if (!result || !result.problem_collection_obj) {
+                                console.error("lc-timer:setupSubmitScript: Error retrieving problems from storage.");
+                                return null;
                             }
+
+                            result.problem_collection_obj[getProblemObject().code].end_ts = Date.now();
+                            
+                            chrome.storage.sync.set({"problem_collection_obj": result.problem_collection_obj}, function () {
+                                console.debug("lc-timer:setupSubmitScript: Added end timestamp to problem.");
+                            });
                         });
                     }
                 }
@@ -59,23 +60,3 @@ window.onload = function() {
     }
 
 };
-
-function getProblemObject(init_timestamp) {
-    problemTitleNode = document.querySelector("div[data-cy=question-title]");
-
-    probObj = {code: null, name: null, init_ts: init_timestamp};
-
-    if(!problemTitleNode){
-        console.error("Error getting problem title node.");
-    } else {
-        probObj.code = problemTitleNode.innerText.split('.')[0].trim();
-        probObj.name = problemTitleNode.innerText.split('.')[1].trim();
-    }
-
-    console.dir(probObj);
-    return probObj;
-}
-
-function getProblemName() {
-    return document.getElementsByTagName("title")[0].innerText;
-}

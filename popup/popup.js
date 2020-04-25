@@ -1,5 +1,10 @@
 chrome.storage.sync.get("problem_collection_obj", function(result){
-    if (result && result.problem_collection_obj) {
+    if(!result) {
+        console.error("popup: Error retrieving result from storage.");
+        return null;
+    }
+
+    if (result.problem_collection_obj) {
         // str = "Total problems monitored: " + result.problem_collection_obj.length + "<br/><br/>";
         setInterval(updatePopup, 1000);
 
@@ -15,9 +20,6 @@ chrome.storage.sync.get("problem_collection_obj", function(result){
             document.getElementById("main").innerHTML = pstr;
         }
     } else {
-        console.error("Error retrieving problems from storage.")
+        console.debug("lc-timer:popup: No problems found in storage. Maybe start a problem first?")
     }
-
-    console.dir(result);
-    console.dir(result.problem_collection_obj);
 });
