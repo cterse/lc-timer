@@ -17,7 +17,7 @@
     "content_scripts": [
         {
             "matches": ["https://*.leetcode.com/problems/*"],
-            "js": ["content-scripts/problem_utils.js", "content-scripts/content.js"]
+            "js": ["jquery-3.5.0.min.js", "content-scripts/problem_utils.js", "content-scripts/content.js"]
         }
     ],
 
