@@ -1,8 +1,8 @@
-let PROBLEM_TITLE_SELECTOR = "div[data-cy=question-title]";
-let PROBLEM_STATUS_ACTIVE = "active";
-let PROBLEM_STATUS_COMPLETE = "complete";
-let SESSION_STATUS_ACTIVE = PROBLEM_STATUS_ACTIVE;
-let SESSION_STATUS_COMPLETE = PROBLEM_STATUS_COMPLETE;
+const PROBLEM_TITLE_SELECTOR = "div[data-cy=question-title]";
+const PROBLEM_STATUS_ACTIVE = "active";
+const PROBLEM_STATUS_COMPLETE = "complete";
+const SESSION_STATUS_ACTIVE = PROBLEM_STATUS_ACTIVE;
+const SESSION_STATUS_COMPLETE = PROBLEM_STATUS_COMPLETE;
 
 function createProblemObject(init_timestamp) {
     probObj = {code: null, name: null, status: null, sessions_list: []};
@@ -10,7 +10,7 @@ function createProblemObject(init_timestamp) {
     if ($( PROBLEM_TITLE_SELECTOR ).length){
         probObj.code = extractProblemCode();
         probObj.name = extractProblemName();
-        probObj = startNewSessionForProblem(probObj); // also updates the problem status 
+        probObj = startNewSessionForProblem(probObj, init_timestamp); // also updates the problem status 
     } else {
         console.error("lc-timer:problem_utils: Error getting problem title node.");
     }
@@ -18,8 +18,8 @@ function createProblemObject(init_timestamp) {
     return probObj;
 }
 
-function startNewSessionForProblem(problem) {
-    let newSession = createNewSession(problem, Date.now());
+function startNewSessionForProblem(problem, init_ts) {
+    let newSession = init_ts ? createNewSession(problem, init_ts) : createNewSession(problem, Date.now());
     problem.sessions_list.push(newSession);
     problem = setProblemStatus(problem, newSession.s_status);
 
@@ -42,7 +42,7 @@ function getProblemStatus(problem) {
 
 function setProblemStatus(problem, status) {
     if (!problem) {
-        console.debug("lc-timer:problem_utils.setproblemStatus : faulty arguments");
+        console.error("lc-timer:problem_utils.setproblemStatus : faulty arguments");
     }
     problem.status = status;
     return problem; 
