@@ -1,13 +1,16 @@
-const PROBLEM_TITLE_SELECTOR = "div[data-cy=question-title]";
-const PROBLEM_STATUS_ACTIVE = "active";
-const PROBLEM_STATUS_COMPLETE = "complete";
-const SESSION_STATUS_ACTIVE = PROBLEM_STATUS_ACTIVE;
-const SESSION_STATUS_COMPLETE = PROBLEM_STATUS_COMPLETE;
+const constants = {
+    STORAGE_PROBLEM_COLLECTION: "problem_collection_obj",
+    PROBLEM_TITLE_SELECTOR: "div[data-cy=question-title]",
+    PROBLEM_STATUS_ACTIVE: "active",
+    PROBLEM_STATUS_COMPLETE: "complete",
+    SESSION_STATUS_ACTIVE: "active",
+    SESSION_STATUS_COMPLETE: "complete",
+};
 
 function createProblemObject(init_timestamp) {
     probObj = {code: null, name: null, status: null, sessions_list: []};
 
-    if ($( PROBLEM_TITLE_SELECTOR ).length){
+    if ($( constants.PROBLEM_TITLE_SELECTOR ).length){
         probObj.code = extractProblemCode();
         probObj.name = extractProblemName();
         probObj = startNewSessionForProblem(probObj, init_timestamp); // also updates the problem status 
@@ -31,7 +34,7 @@ function createNewSession(problem, init_timestamp) {
 
     session.s_id = problem.code + "-" + (problem.sessions_list.length+1);
     session.s_init_ts = init_timestamp ? init_timestamp : Date.now();
-    session.s_status = SESSION_STATUS_ACTIVE;
+    session.s_status = constants.SESSION_STATUS_ACTIVE;
 
     return session;
 }
@@ -49,19 +52,19 @@ function setProblemStatus(problem, status) {
 }
 
 function isProblemActive(problem) {
-    return getProblemStatus(problem) == PROBLEM_STATUS_ACTIVE;
+    return getProblemStatus(problem) == constants.PROBLEM_STATUS_ACTIVE;
 }
 
 function isProblemComplete(problem) {
-    return getProblemStatus(problem) == PROBLEM_STATUS_COMPLETE;
+    return getProblemStatus(problem) == constants.PROBLEM_STATUS_COMPLETE;
 }
 
 function extractProblemCode() {
-    return $( PROBLEM_TITLE_SELECTOR ).text().split('.')[0].trim();
+    return $( constants.PROBLEM_TITLE_SELECTOR ).text().split('.')[0].trim();
 }
 
 function extractProblemName() {
-    return $( PROBLEM_TITLE_SELECTOR ).text().split('.')[1].trim();
+    return $( constants.PROBLEM_TITLE_SELECTOR ).text().split('.')[1].trim();
 }
 
 function completeActiveProblem(problem) {
@@ -72,7 +75,7 @@ function completeActiveProblem(problem) {
 
     let latestProblemSession = problem.sessions_list[problem.sessions_list.length-1];
     latestProblemSession.s_end_ts = Date.now();
-    latestProblemSession.s_status = SESSION_STATUS_COMPLETE;
+    latestProblemSession.s_status = constants.SESSION_STATUS_COMPLETE;
 
     problem = setProblemStatus(problem, latestProblemSession.s_status);
 

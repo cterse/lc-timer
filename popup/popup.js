@@ -1,4 +1,4 @@
-chrome.storage.sync.get("problem_collection_obj", function(result){
+chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result){
     if(!result) {
         console.error("popup: Error retrieving result from storage.");
         return null;

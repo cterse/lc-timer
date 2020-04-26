@@ -8,7 +8,7 @@ window.onload = function() {
             
             prob_obj = createProblemObject(new Date().getTime());
 
-            chrome.storage.sync.get("problem_collection_obj", function(result){
+            chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result){
                 if (!result) {
                     console.error("lc-timer:setupMonitoringScript: Error getting result from sync.");
                     return null;
@@ -31,7 +31,7 @@ window.onload = function() {
                     problemsCollection[prob_obj.code] = prob_obj;
                     storageUpdated = true;
                 } else {
-                    if (getProblemStatus(problemsCollection[prob_obj.code]) == PROBLEM_STATUS_COMPLETE) {
+                    if (getProblemStatus(problemsCollection[prob_obj.code]) == constants.PROBLEM_STATUS_COMPLETE) {
                         console.debug("lc-timer:content: Completed problem exists, adding a new session.");
                         startNewSessionForProblem(problemsCollection[prob_obj.code]);
                         storageUpdated = true;
@@ -41,7 +41,7 @@ window.onload = function() {
                 }
                 
                 if(storageUpdated)
-                    chrome.storage.sync.set({"problem_collection_obj":  problemsCollection}, function(){
+                    chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]:  problemsCollection}, function(){
                         console.debug("lc-timer:setupMonitoringScript: set data to storage.");
                         console.dir(problemsCollection);
                     });
@@ -64,7 +64,7 @@ window.onload = function() {
         
                         //add end timestamp to problem's latest session in storage
                         console.debug("lc-timer:setupSubmitScript: Submission Success. Adding end timestamp.");
-                        chrome.storage.sync.get("problem_collection_obj", function(result) {
+                        chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result) {
                             if (!result || !result.problem_collection_obj) {
                                 console.error("lc-timer:setupSubmitScript: Error retrieving problems from storage.");
                                 return null;
@@ -72,7 +72,7 @@ window.onload = function() {
                             
                             result.problem_collection_obj[prob_obj.code] = completeActiveProblem(result.problem_collection_obj[prob_obj.code]);
                             
-                            chrome.storage.sync.set({"problem_collection_obj": result.problem_collection_obj}, function () {
+                            chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]: result.problem_collection_obj}, function () {
                                 console.debug("lc-timer:setupSubmitScript: Added end timestamp to problem.");
                             });
                         });
