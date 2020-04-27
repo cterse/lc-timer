@@ -1,11 +1,3 @@
-// $( document ).ready(function() {
-//     for (var i=0; i<5; i++) {
-//         $('#main-container')
-//             .append('<div id="new-row-'+i+'" class="row my-row">');
-//         $('#new-row-'+i).append('<p>Test: '+i+'</p>');
-//     }
-// });
-
 chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result){
     if(!result) {
         console.error("popup: Error retrieving result from storage.");
@@ -25,11 +17,7 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                     latestSessionEnd = problemObj.sessions_list[problemObj.sessions_list.length-1].s_end_ts;
                     latestSessionEnd = latestSessionEnd ? latestSessionEnd : Date.now();
                     timeElapsed = latestSessionEnd - latestSessionStart;
-
-                    // pstr += problemObj.code + " : " + problemObj.name + " : ";
-                    // pstr += getTimerString(timeElapsed);
-                    // pstr += "<br />";
-                    
+                                        
                     $('#main-container').empty();
 
                     $('#main-container').append('<div class="row"> id="problem-'+problemObj.code+'"');
