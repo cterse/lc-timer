@@ -19,10 +19,7 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                     timeElapsed = latestSessionEnd - latestSessionStart;
 
                     pstr += problemObj.code + " : " + problemObj.name + " : ";
-                    pstr += getDaysFromTs(timeElapsed) ? getDaysFromTs(timeElapsed) + "d " : "";
-                    pstr += getHoursFromTs(timeElapsed) ? getHoursFromTs(timeElapsed) + "h " : "";
-                    pstr += getMinutesFromTs(timeElapsed) ? getMinutesFromTs(timeElapsed) + "m " : "";
-                    pstr += getSecondsFromTs(timeElapsed) ? getSecondsFromTs(timeElapsed) + "s " : "0 s";
+                    pstr += getTimerString(timeElapsed);
                     pstr += "<br />";
                 }
             }
@@ -32,6 +29,16 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
         console.debug("lc-timer:popup: No problems found in storage. Maybe start a problem first?")
     }
 });
+
+function getTimerString(timeElapsed) {
+    let str = "";
+    str += getDaysFromTs(timeElapsed) ? getDaysFromTs(timeElapsed) + "d " : "";
+    str += getHoursFromTs(timeElapsed) ? getHoursFromTs(timeElapsed) + "h " : "";
+    str += getMinutesFromTs(timeElapsed) ? getMinutesFromTs(timeElapsed) + "m " : "";
+    str += getSecondsFromTs(timeElapsed) ? getSecondsFromTs(timeElapsed) + "s " : "0 s";
+
+    return str;
+}
 
 function getSecondsFromTs(ts) {
     if (!ts) return null;
