@@ -1,7 +1,14 @@
 body {
     width: 200px;
-    height: 200px;
+    min-height: 50px;
+    height: auto;
 }
+
+.sessions-div {
+    font-size: small;
+    font-style: italic;
+}
+
 .my-container {
     /* border: 3px dotted red; */
 }
