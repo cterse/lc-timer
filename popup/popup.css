@@ -1,3 +1,7 @@
+body {
+    width: 200px;
+    height: 200px;
+}
 .my-container {
     /* border: 3px dotted red; */
 }
