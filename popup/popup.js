@@ -16,9 +16,17 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                     problemCode = problemObj.code.toString();
                     
                     $('#main-container').append('<div class="row" id="problem-'+problemCode+'">');
-                    $('#problem-'+problemCode).append('<div class="col-2-auto">'+problemCode+' -&nbsp;</div>');
-                    $('#problem-'+problemCode).append('<div class="col-3-auto">'+problemObj.name+'</div>');
-                    $('#problem-'+problemCode).append('<div class="col-3-auto ml-auto" id="problem-'+problemCode+'-timer"></div>');
+                    $('#problem-'+problemCode).append('<div class="col-1-auto">'+problemCode+' -&nbsp;</div>');
+
+                    // Set problem name. Get a marquee if problem name is greater than enclosing col offsetWidth
+                    $('#problem-'+problemCode).append('<div class="col-5" id="problem-'+problemCode+'-name"></div>');
+                    if(marqueeNeeded(problemObj.name, $('#problem-'+problemCode+'-name'))) {
+                        $('#problem-'+problemCode+'-name').append('<marquee direction="left">'+problemObj.name+'</marquee>');
+                    } else {
+                        $('#problem-'+problemCode+'-name').removeClass("col-5").addClass("col-5-auto").text(problemObj.name);
+                    }
+
+                    $('#problem-'+problemCode).append('<div class="col-4 ml-auto" id="problem-'+problemCode+'-timer"></div>');
                     $('#problem-'+problemCode).append('<div class="col-1-auto"><a data-toggle="collapse" href="#sessionsDiv-'+problemCode+'" role="button" aria-expanded="false" aria-controls="sessionsDiv-'+problemCode+'" data-placement="bottom" title="Previous Sessions"><svg class="bi bi-chevron-down" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"/></svg></a></div>');
 
                     (function(problem) {
@@ -27,9 +35,16 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                             let latestSessionStart = problem.sessions_list[problem.sessions_list.length-1].s_init_ts;
                             let latestSessionEnd = problem.sessions_list[problem.sessions_list.length-1].s_end_ts;
                             latestSessionEnd = latestSessionEnd ? latestSessionEnd : Date.now();
-                            let timeElapsed = latestSessionEnd - latestSessionStart;
+                            // let timeElapsed = latestSessionEnd - latestSessionStart;
+                            let timerString = getTimerString(latestSessionEnd - latestSessionStart);
                             
-                            $('#problem-'+problem.code+'-timer').text(getTimerString(timeElapsed));
+                            // Set problem timer string. Get a marquee if timer string is greater than enclosing col offsetWidth
+                            // if(marqueeNeeded(timerString, $('#problem-'+problem.code+'-timer'))) {
+                            //     $('#problem-'+problem.code+'-timer').append('<marquee direction="left">'+timerString+'</marquee>');
+                            // } else {
+                                $('#problem-'+problem.code+'-timer').removeClass("col-4").addClass("col-4-auto").text(timerString);
+                            // }
+                            
                         }
                     })(problemObj);
                     
@@ -83,4 +98,11 @@ function getDaysFromTs(ts) {
     if (!ts) return null;
 
     return Math.floor( (ts/1000) / (60 * 60 * 24) );
+}
+
+function marqueeNeeded(text, parentElement) {
+    $("#ruler").text(text);
+    let retVal = $("#ruler").outerWidth() > parentElement.outerWidth();
+    $("#ruler").text("");
+    return retVal;
 }

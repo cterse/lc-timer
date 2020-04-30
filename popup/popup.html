@@ -17,17 +17,23 @@
 
 </head>
 <body>
+    <span id="ruler" style="visibility: hidden; white-space: nowrap;"></span>
+
     <!-- <h3 id="main">Open a Leetcode Problem!</h3> -->
-    <div id="main-container" class="container my-container">
-        <!-- <div class="row my-row">
-            <div class="col-2-auto my-col">
-                Problem Code -&nbsp;
+    <div id="main-container" class="container my-container overflow-auto">
+        <div class="row my-row">
+            <div class="col-1-auto my-col">
+                Code:&nbsp;
             </div>
-            <div class="col-3-auto my-col">
-                Problem Name
+            <div id="problem-name" class="col-5 my-col" style="padding-left: 0%; padding-right: 0%;">
+                <marquee behavior="" direction="left">
+                    PROBLEM NAME PROBLEM NAME PROBLEM NAME PROBLEM NAME
+                </marquee>
             </div>
-            <div class="col-3-auto my-col ml-auto">
-                Elapsed Time&nbsp;
+            <div id="timer-div" class="col-3 my-col ml-auto" style="padding-left: 0%; padding-right: 0%;">
+                <marquee behavior="" direction="left">
+                    Time
+                </marquee>
             </div>
             <div class="col-1-auto my-col">
                 <a data-toggle="collapse" href="#sessionsDiv-1" role="button" aria-expanded="false" aria-controls="sessionsDiv-1" data-placement="bottom" title="Previous Sessions">
@@ -36,7 +42,8 @@
                     </svg>
                 </a>
             </div>
-        
+        </div>
+        <!-- 
         </div>
         <div class="collapse" id="sessionsDiv-1">
             <div class="row my-row justify-content-end">

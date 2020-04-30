@@ -1,12 +1,22 @@
 body {
-    width: 200px;
+    width: 250px;
     min-height: 50px;
-    height: auto;
+    border: 3px dotted red;
+}
+
+#main-container {
+    min-height: 50px;
+    max-height: 150px;
 }
 
 .sessions-div {
     font-size: small;
     font-style: italic;
+}
+
+#main-container div[id$='-name'] {
+    padding-left: 0%;
+    padding-right: 0%;
 }
 
 .my-container {
@@ -18,3 +28,4 @@ body {
 .my-col {
     /* border: 2px solid blue; */
 }
+
