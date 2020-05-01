@@ -21,8 +21,9 @@ body {
     margin-right: 1em;
 }
 
-#problem-count-row {
+#problem-count-row p{
     font-size: small;
+    margin-bottom: 0.5em;
 }
 
 #main-container div[id$='-name'] {

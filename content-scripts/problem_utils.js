@@ -82,16 +82,18 @@ function completeActiveProblem(problem) {
     return problem;
 }
 
-function getActiveProblemsCount(problemCollectionObj) {
+function getActiveCompleteProblemsCountObject(problemCollectionObj) {
     if (!problemCollectionObj) return 0;
 
-    let activeCount = 0;
+    let activeCount = 0, completeCount = 0;
     for (var key in problemCollectionObj) {
         if (problemCollectionObj.hasOwnProperty(key)) {
-            if (problemCollectionObj[key] && problemCollectionObj[key].status == constants.PROBLEM_STATUS_ACTIVE)
-                activeCount++;
+            if (problemCollectionObj[key]) {
+                if (isProblemActive(problemCollectionObj[key])) activeCount++;
+                if (isProblemComplete(problemCollectionObj[key])) completeCount++;
+            }
         }
     }
 
-    return activeCount;
+    return {"activeCount": activeCount, "completeCount": completeCount};
 }
