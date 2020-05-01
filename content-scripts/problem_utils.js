@@ -81,3 +81,17 @@ function completeActiveProblem(problem) {
 
     return problem;
 }
+
+function getActiveProblemsCount(problemCollectionObj) {
+    if (!problemCollectionObj) return 0;
+
+    let activeCount = 0;
+    for (var key in problemCollectionObj) {
+        if (problemCollectionObj.hasOwnProperty(key)) {
+            if (problemCollectionObj[key] && problemCollectionObj[key].status == constants.PROBLEM_STATUS_ACTIVE)
+                activeCount++;
+        }
+    }
+
+    return activeCount;
+}

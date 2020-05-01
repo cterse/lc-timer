@@ -63,6 +63,8 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                     $('#main-container').append('<div class="divider div-transparent div-dot"></div>');
                 }
             }
+            $('#main-container').append('<div id="problem-count-row" class="row">');
+            $('#problem-count-row').append('<div class="col-12" align="center"><p>Active Problems: '+getActiveProblemsCount(result.problem_collection_obj)+'</p></div>');
         }
     } else {
         console.debug("lc-timer:popup: No problems found in storage. Maybe start a problem first?")

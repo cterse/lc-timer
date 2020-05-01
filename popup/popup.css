@@ -20,6 +20,10 @@ body {
     margin-top: 0em;
 }
 
+#problem-count-row {
+    font-size: small;
+}
+
 #main-container div[id$='-name'] {
     padding-left: 0%;
     padding-right: 0%;
