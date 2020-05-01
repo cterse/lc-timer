@@ -104,6 +104,7 @@ function getDaysFromTs(ts) {
 }
 
 function marqueeNeeded(text, parentElement) {
+    $("body").append('<span id="ruler" style="visibility: hidden; white-space: nowrap;"></span>');
     $("#ruler").text(text);
     let retVal = $("#ruler").outerWidth() > parentElement.outerWidth();
     $("#ruler").text("");
