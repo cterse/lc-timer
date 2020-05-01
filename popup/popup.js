@@ -5,7 +5,6 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
     }
 
     if (result.problem_collection_obj) {
-        // str = "Total problems monitored: " + result.problem_collection_obj.length + "<br/><br/>";
         updatePopup();
 
         function updatePopup() {
@@ -29,25 +28,22 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                     $('#problem-'+problemCode).append('<div class="col-4 ml-auto" id="problem-'+problemCode+'-timer"></div>');
                     $('#problem-'+problemCode).append('<div class="col-1-auto"><a data-toggle="collapse" href="#sessionsDiv-'+problemCode+'" role="button" aria-expanded="false" aria-controls="sessionsDiv-'+problemCode+'" data-placement="bottom" title="Previous Sessions"><svg class="bi bi-chevron-down" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z" clip-rule="evenodd"/></svg></a></div>');
 
+                    // Generate timer string
                     (function(problem) {
                         setInterval(updateTimestampString, 1000);
                         function updateTimestampString() {
                             let latestSessionStart = problem.sessions_list[problem.sessions_list.length-1].s_init_ts;
                             let latestSessionEnd = problem.sessions_list[problem.sessions_list.length-1].s_end_ts;
                             latestSessionEnd = latestSessionEnd ? latestSessionEnd : Date.now();
-                            // let timeElapsed = latestSessionEnd - latestSessionStart;
                             let timerString = getTimerString(latestSessionEnd - latestSessionStart);
                             
-                            // Set problem timer string. Get a marquee if timer string is greater than enclosing col offsetWidth
-                            // if(marqueeNeeded(timerString, $('#problem-'+problem.code+'-timer'))) {
-                            //     $('#problem-'+problem.code+'-timer').append('<marquee direction="left">'+timerString+'</marquee>');
-                            // } else {
-                                $('#problem-'+problem.code+'-timer').removeClass("col-4").addClass("col-4-auto").text(timerString);
-                            // }
+                            //TODO: Set problem timer string. Get a marquee if timer string is greater than enclosing col offsetWidth
+                            $('#problem-'+problem.code+'-timer').removeClass("col-4").addClass("col-4-auto").text(timerString);
                             
                         }
                     })(problemObj);
                     
+                    // Display session information
                     $('#main-container').append('<div class="collapse sessions-div" id="sessionsDiv-'+problemCode+'">');
                     for (var s_it=problemObj.sessions_list.length-1; s_it >= 0; s_it--) {   // s_it = session_iterator
                         let session = problemObj.sessions_list[s_it];
@@ -63,8 +59,12 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                     $('#main-container').append('<div class="divider div-transparent div-dot"></div>');
                 }
             }
+
+            // Show total active problems count at the end and in extension badge
+            let activeProblemsCount = getActiveProblemsCount(result.problem_collection_obj);
             $('#main-container').append('<div id="problem-count-row" class="row">');
-            $('#problem-count-row').append('<div class="col-12" align="center"><p>Active Problems: '+getActiveProblemsCount(result.problem_collection_obj)+'</p></div>');
+            $('#problem-count-row').append('<div class="col-12" align="center"><p>Active Problems: '+activeProblemsCount+'</p></div>');
+            chrome.browserAction.setBadgeText({text: activeProblemsCount.toString()});
         }
     } else {
         console.debug("lc-timer:popup: No problems found in storage. Maybe start a problem first?")
