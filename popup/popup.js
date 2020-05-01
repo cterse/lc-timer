@@ -21,7 +21,7 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                     // Set problem name. Get a marquee if problem name is greater than enclosing col offsetWidth
                     $('#problem-'+problemCode).append('<div class="col-5" id="problem-'+problemCode+'-name"></div>');
                     if(marqueeNeeded(problemObj.name, $('#problem-'+problemCode+'-name'))) {
-                        $('#problem-'+problemCode+'-name').append('<marquee direction="left">'+problemObj.name+'</marquee>');
+                        $('#problem-'+problemCode+'-name').append('<marquee scrolldelay="200" direction="left">'+problemObj.name+'</marquee>');
                     } else {
                         $('#problem-'+problemCode+'-name').removeClass("col-5").addClass("col-5-auto").text(problemObj.name);
                     }
@@ -58,6 +58,9 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
                         $('#'+sessionRowId).append('<div class="col-1-auto mr-2">Session: '+session.s_id+'</div>');
                         $('#'+sessionRowId).append('<div class="col-2-auto">'+sessionTime+'</div>');
                     }
+
+                    // Add line separator
+                    $('#main-container').append('<div class="divider div-transparent div-dot"></div>');
                 }
             }
         }
