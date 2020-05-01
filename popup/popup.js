@@ -71,7 +71,7 @@ function getTimerString(timeElapsed) {
     str += getDaysFromTs(timeElapsed) ? getDaysFromTs(timeElapsed) + "d " : "";
     str += getHoursFromTs(timeElapsed) ? getHoursFromTs(timeElapsed) + "h " : "";
     str += getMinutesFromTs(timeElapsed) ? getMinutesFromTs(timeElapsed) + "m " : "";
-    str += getSecondsFromTs(timeElapsed) ? getSecondsFromTs(timeElapsed) + "s " : "0 s";
+    str += getSecondsFromTs(timeElapsed) ? getSecondsFromTs(timeElapsed) + "s " : "0s";
 
     return str;
 }
