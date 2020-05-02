@@ -27,8 +27,10 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
         // Links to clear problems
         $('#main-container').append('<div id="clear-problems-div" class="row">');
         $('#clear-problems-div').append('<div class="col text-center">');
-        if (activeCompleteProblemsCountObj.activeCount > 0) $('#clear-problems-div div').append('<a href="#">Clear Active</a>');
-        if (activeCompleteProblemsCountObj.completeCount > 0) $('#clear-problems-div div').append('<a href="#">Clear Complete</a>');
+        if (activeCompleteProblemsCountObj.activeCount > 0) $('#clear-problems-div div').append('<a id="clear-active-link" href="#">Clear Active</a>');
+        if (activeCompleteProblemsCountObj.completeCount > 0) $('#clear-problems-div div').append('<a id="clear-complete-link" href="#">Clear Complete</a>');
+        
+        $('#clear-complete-link').click(purgeCompleteProblemsFromStorage);
 
     } else {
         console.debug("lc-timer:popup: No problems found in storage. Maybe start a problem first?")
@@ -63,19 +65,22 @@ function generateProblemRowHTML(problem) {
 
     //Timer string div
     $('#problem-'+problemCode).append('<div class="col-4-auto ml-auto" id="problem-'+problemCode+'-timer"><a data-toggle="collapse" href="#sessionsDiv-'+problemCode+'" role="button" aria-expanded="false" aria-controls="sessionsDiv-'+problemCode+'" data-placement="bottom" title="Session Info"></a></div>');
-
-    // Generate timer string
-    (function(problem) {
-        setInterval(updateTimestampString, 1000);
-        function updateTimestampString() {
-            let latestSessionStart = problem.sessions_list[problem.sessions_list.length-1].s_init_ts;
-            let latestSessionEnd = problem.sessions_list[problem.sessions_list.length-1].s_end_ts;
-            latestSessionEnd = latestSessionEnd ? latestSessionEnd : Date.now();
-            let timerString = getTimerString(latestSessionEnd - latestSessionStart);
-            
-            $('#problem-'+problem.code+'-timer a').text(timerString);
-        }
-    })(problem);
+    let latestSessionStart = problem.sessions_list[problem.sessions_list.length-1].s_init_ts;
+    let latestSessionEnd = problem.sessions_list[problem.sessions_list.length-1].s_end_ts;
+    if (isProblemComplete(problem)) $('#problem-'+problem.code+'-timer a').text(getTimerString(latestSessionEnd - latestSessionStart));
+    else {
+        // Generate timer string for active problems
+        (function(problem) {
+            setInterval(updateTimestampString, 1000);
+            function updateTimestampString() {
+                latestSessionStart = problem.sessions_list[problem.sessions_list.length-1].s_init_ts;
+                latestSessionEnd = Date.now();
+                let timerString = getTimerString(latestSessionEnd - latestSessionStart);
+                
+                $('#problem-'+problem.code+'-timer a').text(timerString);
+            }
+        })(problem);
+    }
     
     // Display session information
     $('#'+sectionDivId+'').append('<div class="collapse sessions-div" id="sessionsDiv-'+problemCode+'">');
@@ -133,4 +138,32 @@ function marqueeNeeded(text, parentElement) {
     let retVal = $("#ruler").outerWidth() > parentElement.outerWidth();
     $("#ruler").remove();
     return retVal;
+}
+
+function purgeActiveProblemsFromStorage() {
+
+}
+
+function purgeCompleteProblemsFromStorage() {
+    chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result) {
+        if(!result) {
+            console.debug('Error retrieving results from storage.');
+            return null;
+        }
+
+        problemCollection = result.problem_collection_obj;
+        for (var key in problemCollection) {
+            if (!problemCollection.hasOwnProperty(key)) continue;
+            
+            if (isProblemComplete(problemCollection[key])) {
+                delete problemCollection[key];
+                console.debug("lc-timer:popup : Removed problem " + key + " from storage");
+            }
+        }
+
+        chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]:  problemCollection}, function(){
+            console.debug("lc-timer:popup: removed completed problems and updated storage.");
+            location.reload();
+        });
+    });
 }
