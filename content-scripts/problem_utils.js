@@ -8,11 +8,12 @@ const constants = {
 };
 
 function createProblemObject(init_timestamp) {
-    probObj = {code: null, name: null, status: null, sessions_list: []};
+    probObj = {code: null, name: null, status: null, url: null, sessions_list: []};
 
     if ($( constants.PROBLEM_TITLE_SELECTOR ).length){
         probObj.code = extractProblemCode();
         probObj.name = extractProblemName();
+        probObj.url = extractProblemUrl();
         probObj = startNewSessionForProblem(probObj, init_timestamp); // also updates the problem status 
     } else {
         console.error("lc-timer:problem_utils: Error getting problem title node.");
@@ -65,6 +66,10 @@ function extractProblemCode() {
 
 function extractProblemName() {
     return $( constants.PROBLEM_TITLE_SELECTOR ).text().split('.')[1].trim();
+}
+
+function extractProblemUrl() {
+    return location.href;
 }
 
 function completeActiveProblem(problem) {

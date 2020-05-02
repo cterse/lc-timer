@@ -7,7 +7,7 @@
         "128": "assets/images/icon128.png"
     },
 
-    "permissions": ["storage"],
+    "permissions": ["storage", "tabs"],
 
     "background": {
         "persistent": false,
