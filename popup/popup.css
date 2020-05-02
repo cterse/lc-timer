@@ -23,7 +23,7 @@ body {
     margin-right: 1em;
 }
 
-#problem-count-row p{
+#problem-count-div p{
     font-size: small;
     margin-bottom: 0.5em;
 }
@@ -93,7 +93,7 @@ body {
 /* Line separator changes end */
 
 /* Clear buttons changes */
-#clear-problems-row div a {
+#clear-problems-div div a {
     font-size: small;
     margin-left: 0.5em;
     margin-right: 0.5em;

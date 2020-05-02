@@ -18,15 +18,17 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
         }
 
         // Show total problems count at the end
-        $('#active-problems-div').append('<div id="problem-count-row" class="row">');
-        $('#problem-count-row').append('<div class="col-12" align="center"><p>Active Problems: '+activeCompleteProblemsCountObj.activeCount+'</p></div>');
-        $('#problem-count-row').append('<div class="col-12" align="center"><p>Completed Problems: '+activeCompleteProblemsCountObj.completeCount+'</p></div>');
+        $('#active-problems-div').after('<div id="problem-count-div">');
+        $('#problem-count-div').append('<div class="row">');
+        $('#problem-count-div div.row').append('<div class="col-12" align="center"><p>Active Problems: '+activeCompleteProblemsCountObj.activeCount+'</p></div>');
+        $('#problem-count-div div.row').append('<div class="col-12" align="center"><p>Completed Problems: '+activeCompleteProblemsCountObj.completeCount+'</p></div>');
+        $('#problem-count-div').append('<div class="divider div-transparent div-dot"></div>'); // line separator
         
         // Links to clear problems
-        $('#main-container').append('<div id="clear-problems-row" class="row">');
-        $('#clear-problems-row').append('<div class="col text-center">');
-        if (activeCompleteProblemsCountObj.activeCount > 0) $('#clear-problems-row div').append('<a href="#">Clear Active</a>');
-        if (activeCompleteProblemsCountObj.completeCount > 0) $('#clear-problems-row div').append('<a href="#">Clear Complete</a>');
+        $('#main-container').append('<div id="clear-problems-div" class="row">');
+        $('#clear-problems-div').append('<div class="col text-center">');
+        if (activeCompleteProblemsCountObj.activeCount > 0) $('#clear-problems-div div').append('<a href="#">Clear Active</a>');
+        if (activeCompleteProblemsCountObj.completeCount > 0) $('#clear-problems-div div').append('<a href="#">Clear Complete</a>');
 
     } else {
         console.debug("lc-timer:popup: No problems found in storage. Maybe start a problem first?")
@@ -49,7 +51,7 @@ function generateProblemRowHTML(problem) {
     $('#'+sectionDivId+'').append('<div class="row" id="problem-'+problemCode+'">');
     
     // Problem code
-    $('#problem-'+problemCode).append('<div class="col-1-auto"><a target="_blank" href="'+problem.url+' data-placement="bottom" title="Go To Problem">'+problemCode+'</a> -&nbsp;</div>');
+    $('#problem-'+problemCode).append('<div class="col-1-auto"><a target="_blank" href="'+problem.url+'" data-placement="bottom" title="Go To Problem">'+problemCode+'</a> -&nbsp;</div>');
 
     // Set problem name. Get a marquee if problem name is greater than enclosing col offsetWidth
     $('#problem-'+problemCode).append('<div class="col-5" id="problem-'+problemCode+'-name"></div>');
@@ -88,8 +90,7 @@ function generateProblemRowHTML(problem) {
     }
 
     // Add line separator, prepend if problem complete
-    if (isProblemComplete(problem)) $('#'+sectionDivId+'').prepend('<div class="divider div-transparent div-dot"></div>');
-    else $('#'+sectionDivId+'').append('<div class="divider div-transparent div-dot"></div>');
+    $('#'+sectionDivId+'').append('<div class="divider div-transparent div-dot"></div>');
 }
 
 function getTimerString(timeElapsed) {
