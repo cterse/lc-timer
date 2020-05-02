@@ -4,7 +4,7 @@
     "description": "Timer for Leetcode questions.",
     
     "icons": {
-        "128": "assets/images/icon128.png"
+        "64": "assets/images/icon100.png"
     },
 
     "permissions": ["storage"],
@@ -23,7 +23,7 @@
 
     "browser_action": {
         "default_icon": {
-            "128": "assets/images/icon128.png"
+            "64": "assets/images/icon100.png"
         },
         "default_title": "Leetcode Timer",
         "default_popup": "popup/popup.html"

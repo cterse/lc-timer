@@ -22,6 +22,12 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
         $('#problem-count-row').append('<div class="col-12" align="center"><p>Active Problems: '+activeCompleteProblemsCountObj.activeCount+'</p></div>');
         $('#problem-count-row').append('<div class="col-12" align="center"><p>Completed Problems: '+activeCompleteProblemsCountObj.completeCount+'</p></div>');
         
+        // Links to clear problems
+        $('#main-container').append('<div id="clear-problems-row" class="row">');
+        $('#clear-problems-row').append('<div class="col text-center">');
+        if (activeCompleteProblemsCountObj.activeCount > 0) $('#clear-problems-row div').append('<a href="#">Clear Active</a>');
+        if (activeCompleteProblemsCountObj.completeCount > 0) $('#clear-problems-row div').append('<a href="#">Clear Complete</a>');
+
     } else {
         console.debug("lc-timer:popup: No problems found in storage. Maybe start a problem first?")
     }

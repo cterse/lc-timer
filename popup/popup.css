@@ -92,6 +92,13 @@ body {
 }
 /* Line separator changes end */
 
+/* Clear buttons changes */
+#clear-problems-row div a {
+    font-size: small;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
 .my-container {
     /* border: 3px dotted red; */
 }
