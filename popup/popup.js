@@ -47,7 +47,9 @@ function generateProblemRowHTML(problem) {
     let problemCode = problem.code.toString();
 
     $('#'+sectionDivId+'').append('<div class="row" id="problem-'+problemCode+'">');
-    $('#problem-'+problemCode).append('<div class="col-1-auto">'+problemCode+' -&nbsp;</div>');
+    
+    // Problem code
+    $('#problem-'+problemCode).append('<div class="col-1-auto"><a target="_blank" href="'+problem.url+' data-placement="bottom" title="Go To Problem">'+problemCode+'</a> -&nbsp;</div>');
 
     // Set problem name. Get a marquee if problem name is greater than enclosing col offsetWidth
     $('#problem-'+problemCode).append('<div class="col-5" id="problem-'+problemCode+'-name"></div>');
