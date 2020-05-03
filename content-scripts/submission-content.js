@@ -20,11 +20,18 @@ function setupSubmitScript() {
                         }
                         
                         let currentProblemCode = extractProblemCode();
-                        result.problem_collection_obj[currentProblemCode] = completeActiveProblem(result.problem_collection_obj[currentProblemCode]);
+
+                        if (result.problem_collection_obj[currentProblemCode]) {
+                            result.problem_collection_obj[currentProblemCode] = completeActiveProblem(result.problem_collection_obj[currentProblemCode]);
                         
-                        chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]: result.problem_collection_obj}, function () {
-                            console.debug("lc-timer:setupSubmitScript: Added end timestamp to problem.");
-                        });
+                            chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]: result.problem_collection_obj}, function () {
+                                console.debug("lc-timer:setupSubmitScript: Added end timestamp to problem.");
+                            });    
+                        } else {
+                            // User has cleared the problem before submission, and then submitted successfully before reloading the problem.
+                            console.debug('lc-timer:setupSubmitScript: Problem '+currentProblemCode+' not found in storage. Maybe user cleared it.');
+                        }
+
                     });
                 }
             }
