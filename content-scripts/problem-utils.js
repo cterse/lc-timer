@@ -1,6 +1,8 @@
 const constants = {
     STORAGE_PROBLEM_COLLECTION: "problem_collection_obj",
     PROBLEM_TITLE_SELECTOR: "div[data-cy=question-title]",
+    SUBMIT_BUTTON_SELECTOR: "button[data-cy=submit-code-btn]",
+    SUBMISSION_SUCCESS_DIV_CLASS_SELECTOR: ".success__3Ai7",
     PROBLEM_STATUS_ACTIVE: "active",
     PROBLEM_STATUS_COMPLETE: "complete",
     SESSION_STATUS_ACTIVE: "active",

@@ -29,8 +29,12 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
         $('#clear-problems-div').append('<div class="col text-center">');
         if (activeCompleteProblemsCountObj.activeCount > 0) $('#clear-problems-div div').append('<a id="clear-active-link" href="#">Clear Active</a>');
         if (activeCompleteProblemsCountObj.completeCount > 0) $('#clear-problems-div div').append('<a id="clear-complete-link" href="#">Clear Complete</a>');
-        $('#clear-active-link').click(purgeActiveProblemsFromStorage);
-        $('#clear-complete-link').click(purgeCompleteProblemsFromStorage);
+        $('#clear-active-link').click(function() {
+            purgeProblemsFromStorageHavingStatus(constants.PROBLEM_STATUS_ACTIVE);
+        });
+        $('#clear-complete-link').click(function() {
+            purgeProblemsFromStorageHavingStatus(constants.PROBLEM_STATUS_COMPLETE);
+        });
 
     } else {
         console.debug("lc-timer:popup: No problems found in storage. Maybe start a problem first?")
@@ -140,11 +144,12 @@ function marqueeNeeded(text, parentElement) {
     return retVal;
 }
 
-function purgeActiveProblemsFromStorage() {
+function purgeProblemsFromStorageHavingStatus(status) {
+    if (!status || (status != constants.PROBLEM_STATUS_ACTIVE && status != constants.PROBLEM_STATUS_COMPLETE)) {
+        console.debug("lc-timer:popup:purgeProblemsFromStorageHavingStatus : Faulty argument.");
+        return null;
+    }
 
-}
-
-function purgeCompleteProblemsFromStorage() {
     chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result) {
         if(!result) {
             console.debug('Error retrieving results from storage.');
@@ -155,7 +160,8 @@ function purgeCompleteProblemsFromStorage() {
         for (var key in problemCollection) {
             if (!problemCollection.hasOwnProperty(key)) continue;
             
-            if (isProblemComplete(problemCollection[key])) {
+            if ( (status === constants.PROBLEM_STATUS_COMPLETE && isProblemComplete(problemCollection[key])) ||
+                    (status === constants.PROBLEM_STATUS_ACTIVE && isProblemActive(problemCollection[key])) ) {
                 delete problemCollection[key];
                 console.debug("lc-timer:popup : Removed problem " + key + " from storage");
             }
@@ -163,30 +169,6 @@ function purgeCompleteProblemsFromStorage() {
 
         chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]:  problemCollection}, function(){
             console.debug("lc-timer:popup: removed completed problems and updated storage.");
-            location.reload();
-        });
-    });
-}
-
-function purgeActiveProblemsFromStorage() {
-    chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result) {
-        if(!result) {
-            console.debug('Error retrieving results from storage.');
-            return null;
-        }
-
-        problemCollection = result.problem_collection_obj;
-        for (var key in problemCollection) {
-            if (!problemCollection.hasOwnProperty(key)) continue;
-            
-            if (isProblemActive(problemCollection[key])) {
-                delete problemCollection[key];
-                console.debug("lc-timer:popup : Removed problem " + key + " from storage");
-            }
-        }
-
-        chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]:  problemCollection}, function(){
-            console.debug("lc-timer:popup: removed active problems and updated storage.");
             location.reload();
         });
     });
