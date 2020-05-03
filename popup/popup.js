@@ -4,7 +4,7 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
         return null;
     }
 
-    if (result.problem_collection_obj) {
+    if (result.problem_collection_obj && !$.isEmptyObject(result.problem_collection_obj)) {
         $('#main-container').empty();
         
         let activeCompleteProblemsCountObj = getActiveCompleteProblemsCountObject(result.problem_collection_obj);
@@ -29,7 +29,7 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
         $('#clear-problems-div').append('<div class="col text-center">');
         if (activeCompleteProblemsCountObj.activeCount > 0) $('#clear-problems-div div').append('<a id="clear-active-link" href="#">Clear Active</a>');
         if (activeCompleteProblemsCountObj.completeCount > 0) $('#clear-problems-div div').append('<a id="clear-complete-link" href="#">Clear Complete</a>');
-        
+        $('#clear-active-link').click(purgeActiveProblemsFromStorage);
         $('#clear-complete-link').click(purgeCompleteProblemsFromStorage);
 
     } else {
@@ -163,6 +163,30 @@ function purgeCompleteProblemsFromStorage() {
 
         chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]:  problemCollection}, function(){
             console.debug("lc-timer:popup: removed completed problems and updated storage.");
+            location.reload();
+        });
+    });
+}
+
+function purgeActiveProblemsFromStorage() {
+    chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result) {
+        if(!result) {
+            console.debug('Error retrieving results from storage.');
+            return null;
+        }
+
+        problemCollection = result.problem_collection_obj;
+        for (var key in problemCollection) {
+            if (!problemCollection.hasOwnProperty(key)) continue;
+            
+            if (isProblemActive(problemCollection[key])) {
+                delete problemCollection[key];
+                console.debug("lc-timer:popup : Removed problem " + key + " from storage");
+            }
+        }
+
+        chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]:  problemCollection}, function(){
+            console.debug("lc-timer:popup: removed active problems and updated storage.");
             location.reload();
         });
     });
