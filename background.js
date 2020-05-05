@@ -12,7 +12,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 
         if (problemCountObj) {
             if (problemCountObj.activeCount === 0) chrome.browserAction.setBadgeText({text: ""});
-            if (problemCountObj.activeCount > 999) chrome.browserAction.setBadgeText({text: "999+"});
+            else if (problemCountObj.activeCount > 999) chrome.browserAction.setBadgeText({text: "999+"});
             else chrome.browserAction.setBadgeText({text: problemCountObj.activeCount.toString()});
         }
     }
