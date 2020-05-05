@@ -17,11 +17,7 @@
     "content_scripts": [
         {
             "matches": ["https://*.leetcode.com/problems/*"],
-            "js": ["lib/jquery-3.4.1.min.js", "content-scripts/problem-utils.js", "content-scripts/problem-content.js"]
-        },
-        {
-            "matches": ["https://*.leetcode.com/problems/*/submissions/"],
-            "js": ["lib/jquery-3.4.1.min.js", "content-scripts/problem-utils.js", "content-scripts/submission-content.js"]
+            "js": ["lib/jquery-3.4.1.min.js", "content-scripts/problem-utils.js", "content-scripts/problem-content.js", "content-scripts/submission-content.js"]
         }
     ],
 
