@@ -54,6 +54,18 @@ function setProblemStatus(problem, status) {
     return problem; 
 }
 
+function getActualProblemStatus(problem) {
+    if (!problem) {
+        console.error("lc-timer:problem_utils.setproblemStatus : faulty arguments");
+        return null;
+    }
+    if (!problem.sessions_list || !problem.sessions_list.length) {
+        console.error("lc-timer:problem_utils.setproblemStatus : No session associated to problem: " + problem.code);
+        return null;
+    }
+    return problem.sessions_list[problem.sessions_list.length-1].session_status;
+}
+
 function isProblemActive(problem) {
     return getProblemStatus(problem) == constants.PROBLEM_STATUS_ACTIVE;
 }

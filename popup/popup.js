@@ -30,10 +30,10 @@ chrome.storage.sync.get([constants.STORAGE_PROBLEM_COLLECTION], function(result)
         if (activeCompleteProblemsCountObj.activeCount > 0) $('#clear-problems-div div').append('<a id="clear-active-link" href="#">Clear Active</a>');
         if (activeCompleteProblemsCountObj.completeCount > 0) $('#clear-problems-div div').append('<a id="clear-complete-link" href="#">Clear Complete</a>');
         $('#clear-active-link').click(function() {
-            purgeProblemsFromStorageHavingStatus(constants.PROBLEM_STATUS_ACTIVE);
+            purgeProblemSessionsFromStorageHavingStatus(constants.PROBLEM_STATUS_ACTIVE);
         });
         $('#clear-complete-link').click(function() {
-            purgeProblemsFromStorageHavingStatus(constants.PROBLEM_STATUS_COMPLETE);
+            purgeProblemSessionsFromStorageHavingStatus(constants.PROBLEM_STATUS_COMPLETE);
         });
 
     } else {
@@ -144,9 +144,9 @@ function marqueeNeeded(text, parentElement) {
     return retVal;
 }
 
-function purgeProblemsFromStorageHavingStatus(status) {
+function purgeProblemSessionsFromStorageHavingStatus(status) {
     if (!status || (status != constants.PROBLEM_STATUS_ACTIVE && status != constants.PROBLEM_STATUS_COMPLETE)) {
-        console.debug("lc-timer:popup:purgeProblemsFromStorageHavingStatus : Faulty argument.");
+        console.debug("lc-timer:popup:purgeProblemSessionsFromStorageHavingStatus : Faulty argument.");
         return null;
     }
 
@@ -160,10 +160,23 @@ function purgeProblemsFromStorageHavingStatus(status) {
         for (var key in problemCollection) {
             if (!problemCollection.hasOwnProperty(key)) continue;
             
-            if ( (status === constants.PROBLEM_STATUS_COMPLETE && isProblemComplete(problemCollection[key])) ||
-                    (status === constants.PROBLEM_STATUS_ACTIVE && isProblemActive(problemCollection[key])) ) {
-                delete problemCollection[key];
-                console.debug("lc-timer:popup : Removed problem " + key + " from storage");
+            let problem = problemCollection[key];
+
+            if (problem && problem.sessions_list && problem.sessions_list.length > 0) {
+                for (var i=0; i<problem.sessions_list.length; i++) {
+                    let session = problem.sessions_list[i];
+                    if (!session) continue;
+
+                    if ( (status === constants.SESSION_STATUS_ACTIVE && session.session_status === constants.SESSION_STATUS_ACTIVE) ||
+                    (status === constants.SESSION_STATUS_COMPLETE && session.session_status === constants.SESSION_STATUS_COMPLETE) ) {
+                        problem.sessions_list.splice(i, 1);
+                    }
+                }
+
+                // Check if problems need to be removed. (Problems that have no sessions should be removed)
+                if (!problem.sessions_list.length) {
+                    delete problemCollection[key];
+                }
             }
         }
 
