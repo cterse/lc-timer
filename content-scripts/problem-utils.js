@@ -10,7 +10,7 @@ const constants = {
 };
 
 function createProblemObject(init_timestamp) {
-    probObj = {code: null, name: null, status: null, url: null, sessions_list: []};
+    probObj = {code: null, name: null, url: null, sessions_list: []};
 
     if ($( constants.PROBLEM_TITLE_SELECTOR ).length){
         probObj.code = extractProblemCode();
@@ -27,7 +27,6 @@ function createProblemObject(init_timestamp) {
 function startNewSessionForProblem(problem, init_ts) {
     let newSession = init_ts ? createNewSession(problem, init_ts) : createNewSession(problem, Date.now());
     problem.sessions_list.push(newSession);
-    problem = setProblemStatus(problem, newSession.s_status);
 
     return problem;
 }
@@ -43,27 +42,16 @@ function createNewSession(problem, init_timestamp) {
 }
 
 function getProblemStatus(problem) {
-    return problem.status;
-}
-
-function setProblemStatus(problem, status) {
     if (!problem) {
-        console.error("lc-timer:problem_utils.setproblemStatus : faulty arguments");
-    }
-    problem.status = status;
-    return problem; 
-}
-
-function getActualProblemStatus(problem) {
-    if (!problem) {
-        console.error("lc-timer:problem_utils.setproblemStatus : faulty arguments");
+        console.error("lc-timer:problem_utils.getProblemStatus : faulty arguments");
         return null;
     }
     if (!problem.sessions_list || !problem.sessions_list.length) {
-        console.error("lc-timer:problem_utils.setproblemStatus : No session associated to problem: " + problem.code);
+        console.error("lc-timer:problem_utils.getProblemStatus : No session associated to problem: " + problem.code);
         return null;
     }
-    return problem.sessions_list[problem.sessions_list.length-1].session_status;
+
+    return problem.sessions_list[(problem.sessions_list.length)-1].s_status;
 }
 
 function isProblemActive(problem) {
@@ -95,8 +83,6 @@ function completeActiveProblem(problem) {
     let latestProblemSession = problem.sessions_list[problem.sessions_list.length-1];
     latestProblemSession.s_end_ts = Date.now();
     latestProblemSession.s_status = constants.SESSION_STATUS_COMPLETE;
-
-    problem = setProblemStatus(problem, latestProblemSession.s_status);
 
     return problem;
 }

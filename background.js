@@ -25,11 +25,24 @@ function getActiveCompleteProblemsCountObject(problemCollectionObj) {
     for (var key in problemCollectionObj) {
         if (problemCollectionObj.hasOwnProperty(key)) {
             if (problemCollectionObj[key]) {
-                if (problemCollectionObj[key].status == "active") activeCount++;
-                if (problemCollectionObj[key].status == "complete") completeCount++;
+                if (getProblemStatus(problemCollectionObj[key]) == "active") activeCount++;
+                if (getProblemStatus(problemCollectionObj[key]) == "complete") completeCount++;
             }
         }
     }
 
     return {"activeCount": activeCount, "completeCount": completeCount};
+}
+
+function getProblemStatus(problem) {
+    if (!problem) {
+        console.error("lc-timer:background:getProblemStatus : faulty arguments");
+        return null;
+    }
+    if (!problem.sessions_list || !problem.sessions_list.length) {
+        console.error("lc-timer:background:getProblemStatus : No session associated to problem: " + problem.code);
+        return null;
+    }
+
+    return problem.sessions_list[problem.sessions_list.length-1].s_status;
 }
