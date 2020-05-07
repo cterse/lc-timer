@@ -25,6 +25,11 @@ function createProblemObject(init_timestamp) {
 }
 
 function startNewSessionForProblem(problem, init_ts) {
+    if (!problem) {
+        console.error("lc-timer:problem-utils.startNewSessionForProblem : Faulty Arguments");
+        return null;
+    };
+
     let newSession = init_ts ? createNewSession(problem, init_ts) : createNewSession(problem, Date.now());
     problem.sessions_list.push(newSession);
 
@@ -32,6 +37,11 @@ function startNewSessionForProblem(problem, init_ts) {
 }
 
 function createNewSession(problem, init_timestamp) {
+    if (!problem) {
+        console.error("lc-timer:problem-utils.createNewSession : Faulty Arguments");
+        return null;
+    }
+    
     let session = {s_id: null, s_init_ts: null, s_status: null, s_end_ts: null};
 
     session.s_id = problem.code + "-" + (problem.sessions_list.length+1);
