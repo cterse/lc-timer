@@ -47,13 +47,6 @@ describe("problem-utils.js Test Suite", () => {
             "sessions_list":[],
             "url":"https://www.google.com"
         };
-
-        problemCollectionObject = {
-            "1": activeProblem,
-            "2": completeProblem,
-            "3": noSessionProblem
-        };
-
     });
 
     describe('get the problem status', () => {
@@ -179,4 +172,71 @@ describe("problem-utils.js Test Suite", () => {
         });
     });
 
+    describe('complete an active problem', () => {
+        it('completes an active problem', () => {
+            let ret = completeActiveProblem(activeProblem);
+
+            expect(ret.code).toBe(activeProblem.code);
+            expect(ret.name).toBe(activeProblem.name);
+            expect(ret.url).toBe(activeProblem.url);
+            expect(ret.sessions_list.length).toBe(activeProblem.sessions_list.length);
+            expect(ret.sessions_list[ret.sessions_list.length-1].s_id).toBe(activeProblem.sessions_list[activeProblem.sessions_list.length-1].s_id);
+            expect(ret.sessions_list[ret.sessions_list.length-1].s_status).toBe(constants.SESSION_STATUS_COMPLETE);
+            expect(ret.sessions_list[ret.sessions_list.length-1].s_end_ts).not.toBeNull();
+        });
+        
+        it('completes an already complete problem', () => {
+            let ret = completeActiveProblem(completeProblem);
+            
+            expect(ret).toBe(completeProblem);
+        });
+        
+        it('completes an undefined/null problem', () => {
+            let ret = completeActiveProblem();
+            expect(ret).toBeNull();
+            ret = completeActiveProblem(null);
+            expect(ret).toBeNull();
+        });
+
+        it('completes a problem that has no sessions', () => {
+            ret = completeActiveProblem(noSessionProblem);
+            expect(ret).toBeNull();
+        });
+    });
+
+    describe('get (active,complete) count object from problem collection object', () => {
+        it('gets count when the problem collection is empty/null/undefined', () => {
+            let countObj = getActiveCompleteProblemsCountObject();
+            expect(countObj.activeCount).toBe(0);
+            expect(countObj.completeCount).toBe(0);
+
+            countObj = getActiveCompleteProblemsCountObject(null);
+            expect(countObj.activeCount).toBe(0);
+            expect(countObj.completeCount).toBe(0);
+
+            countObj = getActiveCompleteProblemsCountObject({});
+            expect(countObj.activeCount).toBe(0);
+            expect(countObj.completeCount).toBe(0);
+        });
+
+        it('gets count given a collection of only problems having no sessions', () => {
+            let problemCollectionObj = {};
+            problemCollectionObj[noSessionProblem.code] = noSessionProblem;
+
+            let countObj = getActiveCompleteProblemsCountObject(problemCollectionObj);
+            expect(countObj.activeCount).toBe(0);
+            expect(countObj.completeCount).toBe(0);
+        });
+
+        it('gets count given a collection is of mixed problem types', () => {
+            let problemCollectionObj = {};
+            problemCollectionObj[noSessionProblem.code] = noSessionProblem;
+            problemCollectionObj[activeProblem.code] = activeProblem;
+            problemCollectionObj[completeProblem.code] = completeProblem;
+
+            let countObj = getActiveCompleteProblemsCountObject(problemCollectionObj);
+            expect(countObj.activeCount).toBe(1);
+            expect(countObj.completeCount).toBe(1);
+        });
+    });
 });

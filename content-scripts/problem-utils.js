@@ -85,9 +85,17 @@ function extractProblemUrl() {
 }
 
 function completeActiveProblem(problem) {
-    if (!problem || isProblemComplete(problem)) {
-        console.debug("lc-timer:problem_utils.completeActiveProblem : Faulty arguemnt");
+    if (!problem) {
+        console.error("lc-timer:problem_utils.completeActiveProblem : Faulty arguemnt");
         return null;
+    }
+    if (!problem.sessions_list || !problem.sessions_list.length) {
+        console.error("lc-timer:problem_utils.completeActiveProblem : Problem has no sessions");
+        return null;
+    }
+    if (isProblemComplete(problem)) {
+        console.debug("lc-timer:problem_utils.completeActiveProblem : Problem already complete");
+        return problem;
     }
 
     let latestProblemSession = problem.sessions_list[problem.sessions_list.length-1];
@@ -98,7 +106,7 @@ function completeActiveProblem(problem) {
 }
 
 function getActiveCompleteProblemsCountObject(problemCollectionObj) {
-    if (!problemCollectionObj) return 0;
+    if (!problemCollectionObj) return {"activeCount": 0, "completeCount": 0};
 
     let activeCount = 0, completeCount = 0;
     for (var key in problemCollectionObj) {
