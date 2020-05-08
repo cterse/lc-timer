@@ -239,4 +239,30 @@ describe("problem-utils.js Test Suite", () => {
             expect(countObj.completeCount).toBe(1);
         });
     });
+
+    it('extract problem name from DOM', () => {
+        let html = '<div data-cy="question-title" class="css-v3d350">1. Two Sum</div>';
+        let test = $(html + ' ' + constants.PROBLEM_TITLE_SELECTOR);
+        spyOn(window, '$').and.returnValue(test);
+
+        let ret = extractProblemName();
+        
+        expect(ret).toBe("Two Sum");
+    });
+
+    it('extract problem code from DOM', () => {
+        let html = '<div data-cy="question-title" class="css-v3d350">1. Two Sum</div>';
+        let test = $(html + ' ' + constants.PROBLEM_TITLE_SELECTOR);
+        spyOn(window, '$').and.returnValue(test);
+
+        let ret = extractProblemCode();
+        
+        expect(ret).toBe("1");
+    });
+
+    it('extract problem code', () => {
+        let ret = extractProblemUrl();
+
+        expect(ret).toBe(location.href);
+    });
 });
