@@ -167,16 +167,13 @@ function purgeProblemSessionsFromStorageHavingStatus(status) {
                     let session = problem.sessions_list[i];
                     if (!session) continue;
 
-                    if ( (status === constants.SESSION_STATUS_ACTIVE && session.session_status === constants.SESSION_STATUS_ACTIVE) ||
-                    (status === constants.SESSION_STATUS_COMPLETE && session.session_status === constants.SESSION_STATUS_COMPLETE) ) {
+                    if ( (status === constants.SESSION_STATUS_ACTIVE && session.s_status === constants.SESSION_STATUS_ACTIVE) ||
+                    (status === constants.SESSION_STATUS_COMPLETE && session.s_status === constants.SESSION_STATUS_COMPLETE) ) {
                         problem.sessions_list.splice(i, 1);
                     }
                 }
 
-                // Check if problems need to be removed. (Problems that have no sessions should be removed)
-                if (!problem.sessions_list.length) {
-                    delete problemCollection[key];
-                }
+                problemCollection = cleanupProblemCollectionObject(problemCollection);
             }
         }
 

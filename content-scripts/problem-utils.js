@@ -120,3 +120,27 @@ function getActiveCompleteProblemsCountObject(problemCollectionObj) {
 
     return {"activeCount": activeCount, "completeCount": completeCount};
 }
+
+/*
+    Delete problems from the problem collection object that have a null/undefined/empty sessions_list array.
+*/
+function cleanupProblemCollectionObject(problemCollectionObj) {
+    if (!problemCollectionObj) {
+        console.error("lc-timer:problem-utils:cleanupProblemCollectionObject : Faulty Arguments");
+        return null;
+    }
+
+    if ($.isEmptyObject(problemCollectionObj)) {
+        console.debug("lc-timer:problem-utils:cleanupProblemCollectionObject : Problem Collection empty");
+    }
+
+    for (var key in problemCollectionObj) {
+        if (problemCollectionObj.hasOwnProperty(key)) {
+            if (!problemCollectionObj[key].sessions_list || !problemCollectionObj[key].sessions_list.length) {
+                delete problemCollectionObj[key];
+            }
+        }
+    }
+
+    return problemCollectionObj;
+}

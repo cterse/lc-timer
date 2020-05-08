@@ -265,4 +265,41 @@ describe("problem-utils.js Test Suite", () => {
 
         expect(ret).toBe(location.href);
     });
+
+    describe('cleanup problem collection object', () => {
+        it('given the collection object has no problems with undefined/null/empty session_list array', () => {
+            let collectionObj = {};
+            collectionObj[activeProblem.code] = activeProblem;
+            collectionObj[completeProblem.code] = completeProblem;
+
+            let cleanCollectionObj = cleanupProblemCollectionObject(collectionObj);
+
+            expect(cleanCollectionObj).toBe(collectionObj);
+        });
+
+        it('given the collection object has problems with undefined/null/empty session_list array', () => {
+            let collectionObj = {};
+            collectionObj[activeProblem.code] = activeProblem;
+            collectionObj[completeProblem.code] = completeProblem;
+            collectionObj[noSessionProblem.code] = noSessionProblem;
+            let cleanCollectionObj = {};
+            cleanCollectionObj[activeProblem.code] = activeProblem;
+            cleanCollectionObj[completeProblem.code] = completeProblem;
+
+            let cleanedCollectionObj = cleanupProblemCollectionObject(collectionObj);
+
+            expect(cleanedCollectionObj).toEqual(cleanCollectionObj);
+        });
+
+        it('given an empty/null/undefined collection object', () => {
+            let cleanCollectionObj = cleanupProblemCollectionObject();
+            expect(cleanCollectionObj).toBeNull();
+
+            cleanCollectionObj = cleanupProblemCollectionObject(null);
+            expect(cleanCollectionObj).toBeNull();
+
+            cleanCollectionObj = cleanupProblemCollectionObject({});
+            expect(cleanCollectionObj).toEqual({});
+        });
+    });
 });
