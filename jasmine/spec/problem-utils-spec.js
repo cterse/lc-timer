@@ -50,22 +50,22 @@ describe("problem-utils.js Test Suite", () => {
     });
 
     describe('get the problem status', () => {
-        it("gets the problem status of an active problem", () => {
+        it("of an active problem", () => {
             let status = getProblemStatus(activeProblem);
             expect(status).toBe(constants.PROBLEM_STATUS_ACTIVE);
         });
     
-        it("gets the problem status of a complete problem", () => {
+        it("of a complete problem", () => {
             let status = getProblemStatus(completeProblem);
             expect(status).toBe(constants.PROBLEM_STATUS_COMPLETE);
         });
     
-        it("gets problem status of a problem that has no sessions", () => {
+        it("of a problem that has no sessions", () => {
             let status = getProblemStatus(noSessionProblem);
             expect(status).toBeNull();
         });
 
-        it('gets problem status of a null/undefined problem', () => {
+        it('of a null/undefined problem', () => {
             let status = getProblemStatus();
             expect(status).toBeNull();
             status = getProblemStatus(null);
@@ -74,7 +74,7 @@ describe("problem-utils.js Test Suite", () => {
     });
 
     describe('check if a problem is complete', () => {
-        it("checks if a given problem is complete", () => {
+        it("given a complete problem", () => {
             let res = isProblemComplete(completeProblem);
             expect(res).toBeTrue();
             res = isProblemComplete(activeProblem);
@@ -83,7 +83,7 @@ describe("problem-utils.js Test Suite", () => {
             expect(res).toBeFalse();
         });
 
-        it('checks if problem is active when problem provided is null/undefined', () => {
+        it('given a null/undefined problem', () => {
             let res = isProblemComplete();
             expect(res).toBeFalse();
             res = isProblemComplete(null);
@@ -92,7 +92,7 @@ describe("problem-utils.js Test Suite", () => {
     });
 
     describe('check if problem is active', () => {
-        it("checks if given problem is active", () => {
+        it("given an active problem", () => {
             let res = isProblemActive(activeProblem);
             expect(res).toBeTrue();
             res = isProblemActive(completeProblem);
@@ -101,7 +101,7 @@ describe("problem-utils.js Test Suite", () => {
             expect(res).toBeFalse();
         });
 
-        it('checks if problem is active when problem provided is null/undefined', () => {
+        it('given a null/undefined problem', () => {
             let res = isProblemActive();
             expect(res).toBeFalse();
             res = isProblemActive(null);
@@ -110,7 +110,7 @@ describe("problem-utils.js Test Suite", () => {
     });
 
     describe('start a new session for a problem', () => {
-        it("starts a new session for a problem with a provided timestamp", () => {
+        it("given a problem and a timestamp", () => {
             let init_ts = Date.now();
             let fakeSession = {s_id: '1', s_status: 'fake_session'};
             spyOn(window, "createNewSession").and.returnValue(fakeSession);
@@ -122,7 +122,7 @@ describe("problem-utils.js Test Suite", () => {
             expect(completeProblem.sessions_list[completeProblem.sessions_list.length-1]).toBe(fakeSession);
         });
 
-        it("starts a new session for a problem with no timestamp", () => {
+        it("given a problem with no timestamp", () => {
             let fakeSession = {s_id: '1', s_status: 'fake_session'};
             spyOn(window, "createNewSession").and.returnValue(fakeSession);
             
@@ -133,7 +133,7 @@ describe("problem-utils.js Test Suite", () => {
             expect(completeProblem.sessions_list[completeProblem.sessions_list.length-1]).toBe(fakeSession);
         });
 
-        it("tries to start a new session for a undefined/null problem", () => {
+        it("for an undefined/null problem", () => {
             let ret = startNewSessionForProblem(null, Date.now());
             expect(ret).toBeNull();
             ret = startNewSessionForProblem(undefined, Date.now());
@@ -142,7 +142,7 @@ describe("problem-utils.js Test Suite", () => {
     });
 
     describe('create a session object', () => {
-        it('creates a session object given a problem object and a timestamp', () => {
+        it('given a problem object and a timestamp', () => {
             let ts = Date.now();
             let session = createNewSession(completeProblem, ts);
 
@@ -152,7 +152,7 @@ describe("problem-utils.js Test Suite", () => {
             expect(session.s_end_ts).toBeNull();
         });
 
-        it('creates a session object given a problem object but no timestamp', () => {
+        it('given a problem object but no timestamp', () => {
             let session = createNewSession(completeProblem);
 
             expect(session.s_id).toMatch(new RegExp(completeProblem.code + '-[0-9]+'));
@@ -161,19 +161,19 @@ describe("problem-utils.js Test Suite", () => {
             expect(session.s_end_ts).toBeNull();
         });
 
-        it('creates a session object given a timestamp but no problem object', () => {
+        it('given a timestamp but no problem object', () => {
             let ret = createNewSession();
             expect(ret).toBeNull();
         });
 
-        it('creates a session object given a no parameters', () => {
+        it('given no parameters', () => {
             let ret = createNewSession();
             expect(ret).toBeNull();
         });
     });
 
     describe('complete an active problem', () => {
-        it('completes an active problem', () => {
+        it('given an active problem', () => {
             let ret = completeActiveProblem(activeProblem);
 
             expect(ret.code).toBe(activeProblem.code);
@@ -185,27 +185,27 @@ describe("problem-utils.js Test Suite", () => {
             expect(ret.sessions_list[ret.sessions_list.length-1].s_end_ts).not.toBeNull();
         });
         
-        it('completes an already complete problem', () => {
+        it('given an already complete problem', () => {
             let ret = completeActiveProblem(completeProblem);
             
             expect(ret).toBe(completeProblem);
         });
         
-        it('completes an undefined/null problem', () => {
+        it('given an undefined/null problem', () => {
             let ret = completeActiveProblem();
             expect(ret).toBeNull();
             ret = completeActiveProblem(null);
             expect(ret).toBeNull();
         });
 
-        it('completes a problem that has no sessions', () => {
+        it('given a problem that has no sessions', () => {
             ret = completeActiveProblem(noSessionProblem);
             expect(ret).toBeNull();
         });
     });
 
     describe('get (active,complete) count object from problem collection object', () => {
-        it('gets count when the problem collection is empty/null/undefined', () => {
+        it('when the problem collection is empty/null/undefined', () => {
             let countObj = getActiveCompleteProblemsCountObject();
             expect(countObj.activeCount).toBe(0);
             expect(countObj.completeCount).toBe(0);
@@ -219,7 +219,7 @@ describe("problem-utils.js Test Suite", () => {
             expect(countObj.completeCount).toBe(0);
         });
 
-        it('gets count given a collection of only problems having no sessions', () => {
+        it('when the collection of only problems having no sessions', () => {
             let problemCollectionObj = {};
             problemCollectionObj[noSessionProblem.code] = noSessionProblem;
 
@@ -228,7 +228,7 @@ describe("problem-utils.js Test Suite", () => {
             expect(countObj.completeCount).toBe(0);
         });
 
-        it('gets count given a collection is of mixed problem types', () => {
+        it('given a collection of mixed problem types', () => {
             let problemCollectionObj = {};
             problemCollectionObj[noSessionProblem.code] = noSessionProblem;
             problemCollectionObj[activeProblem.code] = activeProblem;
