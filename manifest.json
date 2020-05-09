@@ -4,26 +4,26 @@
     "description": "Timer for Leetcode questions.",
     
     "icons": {
-        "128": "assets/images/icon128.png"
+        "64": "assets/images/icon100.png"
     },
 
-    "permissions": ["storage"],
+    "permissions": ["storage", "tabs"],
 
     "background": {
         "persistent": false,
-        "scripts": ["background.js"]
+        "scripts": ["content-scripts/problem-utils.js", "background.js"]
     },
 
     "content_scripts": [
         {
             "matches": ["https://*.leetcode.com/problems/*"],
-            "js": ["jquery-3.5.0.min.js", "content-scripts/problem_utils.js", "content-scripts/content.js"]
+            "js": ["lib/jquery-3.4.1.min.js", "content-scripts/problem-utils.js", "content-scripts/problem-content.js", "content-scripts/submission-content.js"]
         }
     ],
 
     "browser_action": {
         "default_icon": {
-            "128": "assets/images/icon128.png"
+            "64": "assets/images/icon100.png"
         },
         "default_title": "Leetcode Timer",
         "default_popup": "popup/popup.html"

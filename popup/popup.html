@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script src="../content-scripts/problem_utils.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Import jQuery -->
+    <script src="../lib/jquery-3.4.1.min.js"></script>
+    <!-- Import bootstrap -->
+    <link rel="stylesheet" href="../lib/bootstrap.min.css">
+    <script src="../lib/bootstrap.bundle.min.js"></script>
+
+    <script src="../content-scripts/problem-utils.js"></script>
     <script src="popup.js"></script>
     <link rel="stylesheet" type="text/css" href="popup.css">
+
 </head>
 <body>
-    <h3 id="main">Open a Leetcode Problem!</h3>
+    <div id="main-container" class="container my-container overflow-auto">
+        <div class="row" style="margin-top: 1em;">
+            <div class="col-12" align="center">
+                <p>Start a new <a href="https://leetcode.com/problemset/all/" target="_blank">Leetcode</a> problem!</p>
+                <div class="divider div-transparent div-dot"></div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
