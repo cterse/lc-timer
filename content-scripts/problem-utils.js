@@ -144,3 +144,15 @@ function cleanupProblemCollectionObject(problemCollectionObj) {
 
     return problemCollectionObj;
 }
+
+function advanceProblemActiveTime(problem, advanceByObject) {
+    let session = problem.sessions_list[problem.sessions_list.length-1];
+    let sessionInit = session.s_init_ts;
+    if (advanceByObject.s) sessionInit -= (advanceByObject.s * 1000);
+    if (advanceByObject.m) sessionInit -= (advanceByObject.m * 60 * 1000);
+    if (advanceByObject.h) sessionInit -= (advanceByObject.h * 3600 * 1000);
+    if (advanceByObject.d) sessionInit -= (advanceByObject.d * 24 * 3600 * 1000);
+    session.s_init_ts = sessionInit;
+
+    return problem;
+}

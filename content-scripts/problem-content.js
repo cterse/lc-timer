@@ -17,19 +17,13 @@ function setupMonitoringScript() {
                 problemsCollection = result.problem_collection_obj;
             }
 
-            /*
-                If problem does not exist in storage, add the problem object. 
-                If problem exists in storage and
-                    status = active, do not update the problem object in the storage.
-                    status = complete, add a new session to the problem object.
-            */
             let storageUpdated = false;
             if (!problemsCollection[prob_obj.code]) {
                 console.debug("lc-timer:problem=content : Problem does not exist in storage, adding it.");
                 problemsCollection[prob_obj.code] = prob_obj;
                 storageUpdated = true;
             } else {
-                if (getProblemStatus(problemsCollection[prob_obj.code]) == constants.PROBLEM_STATUS_COMPLETE) {
+                if (isProblemComplete(problemsCollection[prob_obj.code])) {
                     console.debug("lc-timer:problem=content : Completed problem exists, adding a new session.");
                     startNewSessionForProblem(problemsCollection[prob_obj.code]);
                     storageUpdated = true;
@@ -38,11 +32,12 @@ function setupMonitoringScript() {
                 }
             }
             
-            if(storageUpdated)
+            if(storageUpdated) {
                 chrome.storage.sync.set({[constants.STORAGE_PROBLEM_COLLECTION]:  problemsCollection}, function(){
                     console.debug("lc-timer:problem=content : set data to storage.");
                     console.dir(problemsCollection);
                 });
+            }
         });
     }
 }

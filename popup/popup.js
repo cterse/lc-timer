@@ -54,7 +54,7 @@ function generateProblemRowHTML(problem) {
 
     let problemCode = problem.code.toString();
 
-    $('#'+sectionDivId+'').append('<div class="row" id="problem-'+problemCode+'">');
+    $('#'+sectionDivId+'').append('<div class="row problem-row" id="problem-'+problemCode+'">');
     
     // Problem code
     $('#problem-'+problemCode).append('<div class="col-1-auto"><a target="_blank" href="'+problem.url+'" data-placement="bottom" title="Go To Problem">'+problemCode+'</a> -&nbsp;</div>');
