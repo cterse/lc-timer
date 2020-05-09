@@ -1,5 +1,7 @@
 # lc-timer
 
+https://github.com/neil4droid/lc-timer
+
 ## How to load extension for testing
 If you're not on Windows and if Chrome is available for your OS, chances are that your version of Chrome allows loading packaged extensions from outside the Chrome Web Store. You can then just download the `.crx` extension file present in the `lc-timer/package` directory and drag-drop it onto the Chrome's **Extensions** page (`chrome://extensions`) and the extension will be installed.
 
