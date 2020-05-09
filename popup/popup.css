@@ -33,6 +33,16 @@ body {
     margin-bottom: 0.5em;
 }
 
+#complete-info-svg {
+    margin-left: 0.5em;
+}
+
+.popover {
+    background: lightgoldenrodyellow;
+    padding-top: 0em;
+    font-size: small;
+}
+
 #main-container div[id$='-name'] {
     padding-left: 0%;
     padding-right: 0%;
